@@ -36,9 +36,9 @@
           else if (resp.status == "done") {
             $("#"+v).removeClass("queue working").addClass("done");
             if (resp.title != "") {
-              $("#"+v).append("<a href='/do/"+v+"/download'>"+resp.title+"</a>");
+              $("#"+v).append("<a href='do/"+v+"/download'>"+resp.title+"</a>");
             } else {
-              $("#"+v).append("<a href='/do/"+v+"/download'>Download Now</a>");
+              $("#"+v).append("<a href='do/"+v+"/download'>Download Now</a>");
             }
           } else {
             alert("wat. someting wong")

@@ -11,7 +11,7 @@ Install:
 
 *Foreground Gunicorn Usage*
  1. Install gunicorn from pip: `pip install gunicorn`
- 2. Run gunicorn --bind 0.0.0.0:5000 -w 1 "fyd:create_app()"
+ 2. Run `gunicorn --bind 0.0.0.0:5000 -w 1 "fyd:app"`
 
 *Background Gunicorn Usage*
  1. Install gunicorn from apt repository: `sudo apt-get install gunicorn`
@@ -29,7 +29,7 @@ CONFIG = {
         '--umask=0027',
         '--log-level=info',
         '--access-logfile=/var/log/gunicorn/fyd_access.log',
-        'fyd:create_app()',
+        'fyd:app',
     ),
 }
 ```

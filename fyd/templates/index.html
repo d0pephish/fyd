@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <title>Youtube Video Downloader</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet" /> 
+    <link rel="stylesheet" type="text/css" href="static/css/main.css" />
+    <script type="text/javascript" src="static/js/jquery.min.js">
+    </script>  
+    <script type="text/javascript">
+    $(function() {
+      $("form").show();
+      setInterval(check_status, 5000);
+    });
+    function add_to_queue(v) {
+      spans = $("#queue span")
+      for(i=0; i<spans.length; i++) { 
+        if ( v == spans[i].id ) 
+          $("#"+spans[i].id).remove() 
+      }
+      $("#queue").append('<span id="'+v+'">'+v+'</span>');
+    }
+    function ytVidId(url) {
+      var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+      return (url.match(p)) ? RegExp.$1 : false;
+    }
+    // thanks for doing the work for me http://stackoverflow.com/questions/2964678/jquery-youtube-url-validation-with-regex/10315969#10315969 
+    function grab_video(v,type) {
+      $.get("do/"+v+"/"+type, function(data) {
+          resp = JSON.parse(data);
+            $("#"+v+" a").remove()
+          if (resp.status == "created" )
+            $("#"+v).removeClass("working done").addClass("queue")
+          else if (resp.status == "queue")
+            $("#"+v).removeClass("working done").addClass("queue")
+          else if (resp.status == "working")
+            $("#"+v).removeClass("queue done").addClass("working")
+          else if (resp.status == "done") {
+            $("#"+v).removeClass("queue working").addClass("done");
+            if (resp.title != "") {
+              $("#"+v).append("<a href='/do/"+v+"/download'>"+resp.title+"</a>");
+            } else {
+              $("#"+v).append("<a href='/do/"+v+"/download'>Download Now</a>");
+            }
+          } else {
+            alert("wat. someting wong")
+            $("#"+v).remove();
+          }
+        });
+    }
+    function get_video(f) {
+      v = ytVidId(f.url.value);
+      if(v) {
+        add_to_queue(v);
+        grab_video(v,"grab")
+      } else {
+        alert("OH NO! that's not a valid youtube url.");
+      }
+    f.url.value = "";
+    }
+    function check_status() {
+      $("#queue span").each(function(i,obj) {
+        if(!$(obj).hasClass("done"))
+          grab_video(obj.id,"status")
+      });
+    }
+    </script>
+  </head>
+  <body>
+      <noscript><center><h1>Javascript Required.</h1><br />I applaud your noscript and/or desire to live in 1998 but I prefer to use the fancy ajax so you'll need to come back to the future.</center></noscript>
+      <form method="POST" style="display:none;" onsubmit="get_video(this);return false;">
+      <h1>Enter the Youtube Video URL (link) in the box below:</h1>
+      <input type="text" name="url" value="" />
+      <input type="submit" value="Convert and Download" />
+      </form>
+      <div id="queue">
+      </div>
+  </body>
+</html>

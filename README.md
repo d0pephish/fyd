@@ -16,21 +16,20 @@ Install:
 *Background Gunicorn Usage*
  1. Install gunicorn from apt repository: `sudo apt-get install gunicorn`
  2. Create a gunicorn config file for fyd: `sudo vim /etc/gunicorn.d/fyd`
-`
-CONFIG = {
-    'mode': 'wsgi',
-    'working_dir': '/path/to/fyd',
-      'python': '/usr/bin/python',
-    'user': 'daemon',
-    'group': 'daemon',
-    'args': (
-        '--bind=0.0.0.0:5000',
-        '--workers=1',
-        '--umask=0027',
-        '--log-level=info',
-        '--access-logfile=/var/log/gunicorn/fyd_access.log',
-        'fyd:create_app()',
-    ),
-}
-`
+`CONFIG = {`
+`    'mode': 'wsgi',`
+`    'working_dir': '/path/to/fyd',`
+`      'python': '/usr/bin/python',`
+`    'user': 'daemon',`
+`    'group': 'daemon',`
+`    'args': (`
+`        '--bind=0.0.0.0:5000',`
+`        '--workers=1',`
+`        '--umask=0027',`
+`        '--log-level=info',`
+`        '--access-logfile=/var/log/gunicorn/fyd_access.log',`
+`        'fyd:create_app()',`
+`    ),`
+`}`
+
  3. Start the gunicorn server: `service gunicorn start` 

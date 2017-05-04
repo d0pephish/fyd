@@ -1,25 +1,30 @@
+from __future__ import print_function
 import os, sys, time
 import threading
 import pytube
-
 class downloader:
-  interval = 60
+  interval = 30
   purge = 60
   def __init__(self,dirs):
     self.dirs = dirs
-    print str(dirs)
     self.start()
+  
+  def dbg(self,msg):
+    print("[Worker Thread:] " + msg , file=sys.stderr)
 
   def iterate_queue(self):
-    current_queue = os.listdir(self.dirs["queue"])
-    for v in current_queue:
-      print "working", v
-      f = open(self.dirs["working"] + "/" + v, "w")
-      timestamp = time.strftime("%c")
-      f.write(timestamp)
-      f.close()
-      os.remove(self.dirs["queue"] + "/" + v)
-      self.do_work(v)
+    try:
+      current_queue = os.listdir(self.dirs["queue"])
+      for v in current_queue:
+        self.dbg("working " + str(v))
+        f = open(self.dirs["working"] + "/" + v, "w")
+        timestamp = time.strftime("%c")
+        f.write(timestamp)
+        f.close()
+        os.remove(self.dirs["queue"] + "/" + v)
+        self.do_work(v)
+    except:
+      self.dbg("error iterating queue")
       
   def do_work(self,v):
     try:
@@ -33,9 +38,9 @@ class downloader:
       f.write(timestamp+"\n"+filename)
       f.close()
       os.remove(self.dirs["working"] + "/" + v)
-      print "done with", v
+      self.dbg("done with " + str(v)) 
     except:
-      print "error on this go"
+      self.dbg("error on this go " + str(v)) 
   
   def clean_up(self):
     try:
@@ -48,14 +53,15 @@ class downloader:
         t = time.mktime(t)
         t2 = time.time()
         if t2-t > (60*self.purge):
-          print "purging", v
+          self.dbg("purging " + str(v))
           os.remove(self.dirs["done"] + "/" + v)
           os.remove(self.dirs["downloads"] + "/" + v + ".mp4")
     except: 
-      print "error on this clean"
+      self.dbg("error on this clean")
 
   def start(self):
       self.iterate_queue()
       self.clean_up()
       time.sleep(self.interval)
       self.start()
+

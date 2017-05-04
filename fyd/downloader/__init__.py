@@ -7,7 +7,9 @@ class downloader:
   purge = 60
   def __init__(self,dirs):
     self.dirs = dirs
-    self.start()
+    while True:
+      self.start()
+      time.sleep(self.interval)
   
   def dbg(self,msg):
     print("[Worker Thread:] " + msg , file=sys.stderr)
@@ -62,6 +64,4 @@ class downloader:
   def start(self):
       self.iterate_queue()
       self.clean_up()
-      time.sleep(self.interval)
-      self.start()
 

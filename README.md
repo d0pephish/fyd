@@ -35,3 +35,6 @@ CONFIG = {
 ```
 
  3. Start the gunicorn server: `service gunicorn start` 
+
+*Some bug fixes*
+ 1. I want to do something fancy like use gunicorn to capture logs, but gunicorn doesn't like it. Solution for this is to install gunicorn from both pip and gunicorn, and then: `mv /usr/bin/gunicorn /usr/bin/gunicorn.bak'; ln -s `which gunicorn` /usr/bin/gunicorn`

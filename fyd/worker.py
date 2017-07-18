@@ -26,11 +26,13 @@ def handle_grab(v):
 def handle_download(v):
   status = get_video_status(v)
   if not status or status["status"] != "done":
-    return False,False
+    return False,False,False
+  filename = v+".mp4"
+  dir = DIRS["downloads"]
   path = DIRS["downloads"] + "/" + v + ".mp4" 
   if not os.path.isfile(path):
-    return False,False
-  f = open(path, "r")
-  data = f.read()
-  f.close()
-  return data,status["title"]
+    return False,False,False
+#  f = open(path, "r")
+#  data = f.read()
+#  f.close()
+  return dir,filename,status["title"]

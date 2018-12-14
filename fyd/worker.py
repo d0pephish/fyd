@@ -28,11 +28,11 @@ def handle_download(v):
   if not status or status["status"] != "done":
     return False,False,False
   filename = v+".mp4"
-  dir = DIRS["downloads"]
-  path = DIRS["downloads"] + "/" + v + ".mp4" 
+  directory = "/".join(DIRS["downloads"].split("/")[1:])
+  path = DIRS["downloads"] + "/"+ filename 
   if not os.path.isfile(path):
     return False,False,False
 #  f = open(path, "r")
 #  data = f.read()
 #  f.close()
-  return dir,filename,status["title"]
+  return directory,filename,status["title"]

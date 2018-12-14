@@ -33,11 +33,10 @@ class downloader:
       yt = pytube.YouTube("http://www.youtube.com/watch?v="+v)
       title = yt.title.encode('utf-8')
       video = yt.streams.filter(subtype="mp4",progressive=True).order_by("res").asc().all()[0]
-      filename = video.download(self.dirs["downloads"] + "/")
-      filename = filename.split("/")[-1]
+      video.download(self.dirs["downloads"] + "/", filename=v)
       f = open(self.dirs["done"] + "/" + v, "w")
       timestamp = time.strftime("%c")
-      f.write(timestamp+"\n"+filename)
+      f.write(timestamp+"\n"+title)
       f.close()
       os.remove(self.dirs["working"] + "/" + v)
       self.dbg("done with " + str(v)) 

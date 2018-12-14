@@ -4,7 +4,7 @@ import threading
 import pytube
 class downloader:
   interval = 30
-  purge = 60
+  purge = 30
   def __init__(self,dirs):
     self.dirs = dirs
     while True:
@@ -43,9 +43,25 @@ class downloader:
       self.dbg("done with " + str(v)) 
     except:
       self.dbg("error on this go " + str(v)) 
-  
+      try:
+        os.remove(self.dirs["queue"] + "/" + v) 
+      except:
+        self.dbg("error removing working file")
+      
   def clean_up(self):
     try:
+      done = os.listdir(self.dirs["working"])
+      for v in done:
+        f = open(self.dirs["word"] + "/" + v)
+        t = f.read(24)
+        f.close()
+        t = time.strptime(t)
+        t = time.mktime(t)
+        t2 = time.time()
+        if t2-t > (60*self.purge):
+          self.dbg("purging " + str(v))
+          os.remove(self.dirs["working"] + "/" + v)
+
       done = os.listdir(self.dirs["done"])
       for v in done:
         f = open(self.dirs["done"] + "/" + v)
@@ -64,4 +80,3 @@ class downloader:
   def start(self):
       self.iterate_queue()
       self.clean_up()
-

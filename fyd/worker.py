@@ -13,7 +13,7 @@ def get_video_status(v):
       return { "status" : k, "time" : timestamp, "title" : title }
   return False  
 
-def handle_grab(v):
+def handle_grab(v, res="best"):
   status = get_video_status(v)
   if not status:
     timestamp = time.strftime("%c")

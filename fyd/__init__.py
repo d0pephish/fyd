@@ -4,7 +4,6 @@ import os, sys, atexit
 from werkzeug.serving import is_running_from_reloader
 import threading
 from fyd.downloader import *
-
 DIRS = {"queue" : "queue", "downloads" :"downloads", "working" : "working", "done" : "done" }
 # DIRS is the directories I will use for the flat file queue system. because sometimes sql is teh suxors
 
@@ -35,8 +34,11 @@ def create_app():
     t.start()
 
   return app
-app = create_app()
 
+app = create_app()
 from fyd import views
+
+if __name__ == '__main__':
+  app.run()
 
 

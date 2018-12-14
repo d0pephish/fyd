@@ -41,7 +41,7 @@
               $("#"+v).append("<a href='do/"+v+"/download'>Download Now</a>");
             }
           } else {
-            alert("wat. someting wong")
+            alert("The video failed to download.")
             $("#"+v).remove();
           }
         });
@@ -69,6 +69,20 @@
       <form method="POST" style="display:none;" onsubmit="get_video(this);return false;">
       <h1>Enter the Youtube Video URL (link) in the box below:</h1>
       <input type="text" name="url" value="" />
+      <!--<select name="max_res" id="max_res">
+        <option value="4k60fps">4k 60fps</option>
+        <option value="4k30fps">4k 30fps</option>
+        <option value="1440p60fps">1440p 60fps</option>
+        <option value="1440p30fps">1440p 30fps</option>
+        <option value="1080p60fps">1080p 60fps</option>
+        <option value="1080p">1080p</option>
+        <option value="720p60fps">720p 60fps</option>
+        <option value="720p" selected="selected">720p</option>
+        <option value="480p">480p</option>
+        <option value="360p">360p</option>
+        <option value="240p">360p</option>
+      </select>
+      <label for="max_res">Maximum Resolution: </label> -->
       <input type="submit" value="Convert and Download" />
       </form>
       <div id="queue">

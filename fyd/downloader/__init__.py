@@ -31,10 +31,10 @@ class downloader:
   def do_work(self,v):
     try:
       yt = pytube.YouTube("http://www.youtube.com/watch?v="+v)
-      filename = yt.filename.encode('utf-8')
-      yt.set_filename(v)
-      video = yt.filter('mp4')[-1]
-      video.download(self.dirs["downloads"] + "/")
+      title = yt.title.encode('utf-8')
+      video = yt.streams.filter(subtype="mp4",progressive=True).order_by("res").asc().all()[0]
+      filename = video.download(self.dirs["downloads"] + "/")
+      filename = filename.split("/")[-1]
       f = open(self.dirs["done"] + "/" + v, "w")
       timestamp = time.strftime("%c")
       f.write(timestamp+"\n"+filename)
@@ -44,7 +44,7 @@ class downloader:
     except:
       self.dbg("error on this go " + str(v)) 
       try:
-        os.remove(self.dirs["queue"] + "/" + v) 
+        os.remove(self.dirs["working"] + "/" + v) 
       except:
         self.dbg("error removing working file")
       
